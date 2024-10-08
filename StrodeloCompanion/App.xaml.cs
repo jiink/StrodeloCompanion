@@ -10,5 +10,5 @@ namespace StrodeloCompanion
     public partial class App : Application
     {
     }
-
+//oiemgoitmohimftoihmofmhoifmth
 }
