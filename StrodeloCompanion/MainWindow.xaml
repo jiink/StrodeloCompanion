@@ -6,23 +6,60 @@
         xmlns:local="clr-namespace:StrodeloCompanion"
         mc:Ignorable="d"
         Title="Strodelo Companion" Height="450" Width="800">
-    <Grid Background="#3C2970"> 
+    <Grid Background="#3C2970">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="88*"/>
+            <ColumnDefinition Width="312*"/>
+            <ColumnDefinition Width="123*"/>
+            <ColumnDefinition Width="277*"/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="IpAddressBox" Grid.Row="0" Grid.Column="0" Text="127.0.0.1" FontSize="30" Margin="40" VerticalContentAlignment="Center" Height="55" Padding="5"/>
-        <Button x:Name="PairButton" Click="PairButton_Click" Grid.Row="0" Grid.Column="1" Content="Pair" Margin="80" FontSize="30"/>
+        <TextBox x:Name="IpAddressBox" Grid.Row="0" Grid.Column="0" Text="127.0.0.1" FontSize="30" Margin="40,81,40,81" VerticalContentAlignment="Center" Height="55" Padding="5" Grid.ColumnSpan="2"/>
+        <Button x:Name="PairButton" Click="PairButton_Click" Grid.Row="0" Grid.Column="2" Content="Pair" Margin="80,80,80,80" FontSize="30" Grid.ColumnSpan="2"/>
         <Button x:Name="SendFileButton"
                 Click="SendFileButton_Click" 
                 Grid.Row="1"
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="4"
                 Content="Send file"
                 FontSize="30"
-                Margin="40"/>
+                Margin="40,40,40,40"/>
+
+
+        <TextBlock x:Name="DeviceStatusTextBlock"
+           Foreground="Black" 
+           FontSize="20"
+           Background="Orange"        
+           Visibility="Collapsed" 
+           VerticalAlignment="Top" Margin="40,148,102,0" Grid.ColumnSpan="3" Height="37" />
+
+        <TextBlock x:Name="DeviceStatusTextBlock1"
+           Foreground="Black" 
+           FontSize="20"
+           Background="Green"        
+           Visibility="Collapsed" 
+           VerticalAlignment="Top" Margin="40,148,102,0" Grid.ColumnSpan="3" Height="37" />
+
+
+        <TextBlock x:Name="StatusTextBlock" Grid.ColumnSpan="2"
+           Foreground="White" 
+           Background="Black"
+           FontSize="20"
+           Visibility="Collapsed" 
+           HorizontalAlignment="Left" 
+           VerticalAlignment="Top" Width="197" Margin="40,206,0,0" Grid.RowSpan="2" />
+
+
+        <ProgressBar x:Name="CheckProgressBar" Grid.Row="1" Grid.ColumnSpan="2"
+             IsIndeterminate="True" 
+             Visibility="Collapsed" 
+             Height="20" 
+             Margin="40,24,40,173"/>
+
+
+
+
     </Grid>
 </Window>

@@ -19,32 +19,69 @@ namespace StrodeloCompanion
             InitializeComponent();
         }
 
-        private void PairButton_Click(object sender, RoutedEventArgs e)
+
+
+        private async void PairButton_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Pairing button clicked");
 
             string ipAddressString = IpAddressBox.Text;
 
-            if (IPAddress.TryParse(ipAddressString, out pairedDeviceAddress))
-            {
-                bool deviceExists = CheckDeviceExists(pairedDeviceAddress);
+            // Hide previous messages initially
+            DeviceStatusTextBlock.Visibility = Visibility.Collapsed;
+            DeviceStatusTextBlock1.Visibility = Visibility.Collapsed;
 
-                if (deviceExists)
-                {
-                    Debug.WriteLine("Device found at IP address: " + ipAddressString);
-                }
-                else
-                {
-                    Debug.WriteLine("No device found at IP address: " + ipAddressString);
-                }
+            StatusTextBlock.Visibility = Visibility.Collapsed; // Hide status text initially
+            CheckProgressBar.Visibility = Visibility.Collapsed; // Hide loading indicator
+            PairButton.IsEnabled = false; // Disable the pair button
+
+            // Check for valid IP address format
+            if (!IPAddress.TryParse(ipAddressString, out pairedDeviceAddress))
+            {
+                // Show error message for invalid IP address format
+                DeviceStatusTextBlock.Visibility = Visibility.Visible; // Show the error message
+                DeviceStatusTextBlock.Text = "Status: Invalid IP address!";
+                PairButton.IsEnabled = true;
             }
             else
             {
-                Debug.WriteLine("Invalid IP address format: " + ipAddressString);
+                // Show status text and loading indicator
+                StatusTextBlock.Visibility = Visibility.Visible; // Show status text
+                StatusTextBlock.Text = "Checking for device..."; // Set initial status message
+                CheckProgressBar.Visibility = Visibility.Visible; // Show loading indicator
+
+
+                // Run CheckDeviceExists on a separate task to avoid blocking the UI
+                bool deviceExists = await Task.Run(() => CheckDeviceExists(pairedDeviceAddress));
+
+
+                // Optional delay to let the user read the message
+                await Task.Delay(5000); //5s
+
+                StatusTextBlock.Visibility = Visibility.Collapsed; // Hide status message
+                CheckProgressBar.Visibility = Visibility.Collapsed; // Hide loading indicator
+
+                // Re-enable the pair button
+                PairButton.IsEnabled = true;
+
+
+                // Check the device existence and update the status
+                if (deviceExists)
+                {
+                    DeviceStatusTextBlock1.Visibility = Visibility.Visible; // Show success message
+                    DeviceStatusTextBlock1.Text = "Status: Device successfully paired!";
+                }
+                else
+                {
+                    DeviceStatusTextBlock.Visibility = Visibility.Visible; // Show error message for no device found
+                    DeviceStatusTextBlock.Text = "Status: No device found at this IP address.";
+                }
+                
             }
         }
 
-        // Does an actual device exist at the given IP address? Or is it just bogus?
+
+        // Does an actual device exist at the given IP address? ruturn => result to the above operation
         private bool CheckDeviceExists(IPAddress ipAddress)
         {
             Ping ping = new Ping();
@@ -60,6 +97,9 @@ namespace StrodeloCompanion
                 return false;
             }
         }
+
+
+
 
         // Given a file path, load the file and send its contents to the given host (e.g. 192.168.50.122:8111)
         public void SendFile(string filePath, string host, int port)
