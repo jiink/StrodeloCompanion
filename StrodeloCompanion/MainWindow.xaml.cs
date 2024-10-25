@@ -4,6 +4,9 @@ using System.Net.Sockets;
 using System.Net;
 using System.Windows;
 using System.IO;
+using System.Security.Cryptography;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace StrodeloCompanion
 {
@@ -102,20 +105,60 @@ namespace StrodeloCompanion
 
 
         // Given a file path, load the file and send its contents to the given host (e.g. 192.168.50.122:8111)
-        public void SendFile(string filePath, string host, int port)
+        public async void SendFile(string filePath, string host, int port)
         {
-            var client = new TcpClient(host, port);
-            var stream = client.GetStream();
+            ProgressBar.Visibility = Visibility.Visible;
+            ProgressBar.Value = 0;
 
-            using (var fileStream = File.OpenRead(filePath))
+            ProgressPercentageTextBlock.Visibility = Visibility.Visible;
+
+            try
             {
-                fileStream.CopyTo(stream);
-            }
+                using (var client = new TcpClient(host, port))
+                using (var stream = client.GetStream())
+                using (var fileStream = File.OpenRead(filePath))
+                {
+                    byte[] buffer = new byte[81920]; // 80KB buffer size
+                    int bytesRead;
+                    long totalBytesSent = 0;
+                    long fileLength = fileStream.Length;
 
-            stream.Close();
-            client.Close();
+                    ProgressBar.Value = 0; // Reset progress bar
+                    ProgressPercentageTextBlock.Text = "0%"; // Reset percentage display
+
+                    while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        await stream.WriteAsync(buffer, 0, bytesRead);
+                        totalBytesSent += bytesRead;
+
+                        // Calculate the percentage and update UI
+                        double progress = (double)totalBytesSent / fileLength * 100;
+                        ProgressBar.Value = progress;
+                        ProgressPercentageTextBlock.Text = $"{progress:F2}%";
+
+                        Debug.WriteLine($"Bytes sent: {totalBytesSent} / {fileLength} ({progress:F2}%)");
+                    }
+
+                    MessageBox.Show("File transfer completed!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"File transfer failed: {ex.Message}");
+            }
+            finally
+            {
+                ProgressBar.Visibility = Visibility.Collapsed;
+                ProgressPercentageTextBlock.Visibility = Visibility.Collapsed;
+            }
+        
+
+        //stream.Close();
+        //client.Close();
+
         }
 
+        // Button click event for selecting and sending a file
         private void SendFileButton_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
@@ -127,10 +170,91 @@ namespace StrodeloCompanion
                 string filePath = openFileDialog.FileName;
                 Debug.WriteLine("Selected file: " + filePath);
 
-                // Send the file to pairedDeviceAddress
-                SendFile(filePath, pairedDeviceAddress.ToString(), 8111); // Put this port number (8111) in a const variable somewhere
-
+                // Verify file integrity before sending
+                if (VerifyFileIntegrity(filePath))
+                {
+                    // Send the file to pairedDeviceAddress
+                    SendFile(filePath, pairedDeviceAddress.ToString(), 8111); // Put this port number in a const variable somewhere
+                }
+                else
+                {
+                    MessageBox.Show("File integrity check failed. Please try again with a valid file.");
+                }
             }
         }
+
+        // Drag and Drop testing...
+        private void OnDragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                FileDropBorder.Background = new SolidColorBrush(Colors.LightGreen);  // Change background to green
+                FileDropBorder.BorderBrush = new SolidColorBrush(Colors.Green);      // Change border to green
+                DropText.Text = "Release to Drop";                                    // Change the text
+                DropText.Foreground = new SolidColorBrush(Colors.White);              // Change text color for better visibility
+                e.Effects = DragDropEffects.Copy;                                     // Set the effect to 'copy' (indicating a valid drop)
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None; // Set to 'none' if not valid file type
+            }
+        }
+
+        // Event handler for when a file leaves the drag area (without dropping)
+        private void OnDragLeave(object sender, DragEventArgs e)
+        {
+            ResetDragDropArea();  // Reset the visual state
+        }
+
+        // Event handler for when a file is dropped in the drop zone
+        private void OnDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (files != null && files.Length > 0)
+                {
+                    string filePath = files[0];  // Get the first file (assuming single file drag-and-drop)
+                    Debug.WriteLine("Dropped file: " + filePath);
+
+                    // Start sending the file
+                    SendFile(filePath, pairedDeviceAddress.ToString(), 8111);
+
+                    // Reset the visual indication after file is dropped
+                    ResetDragDropArea();
+                }
+            }
+        }
+
+        // Helper method to reset the drag-and-drop area to its default state
+        private void ResetDragDropArea()
+        {
+            FileDropBorder.Background = new SolidColorBrush(Colors.LightGray); // Reset background
+            FileDropBorder.BorderBrush = new SolidColorBrush(Colors.Gray);      // Reset border
+            DropText.Text = "Drag and Drop File Here";                          // Reset text
+            DropText.Foreground = new SolidColorBrush(Colors.Black);            // Reset text color
+        }
+
+
+
+        // Verify the integrity of the file (hash check, file size check, etc.)
+        private bool VerifyFileIntegrity(string filePath)
+        {
+            // Simple size check (ensure file is not too small or too large)
+            FileInfo fileInfo = new FileInfo(filePath);
+            if (fileInfo.Length == 0 || fileInfo.Length > 1_000_000_000) // e.g., reject files larger than 1GB
+            {
+                return false;
+            }
+
+            // Optional: Add hash check or file extension validation here
+            return true;
+        }
     }
+
+
+
+
+
 }
