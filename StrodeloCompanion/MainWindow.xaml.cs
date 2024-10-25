@@ -112,6 +112,8 @@ namespace StrodeloCompanion
 
             ProgressPercentageTextBlock.Visibility = Visibility.Visible;
 
+            SendFileButton.IsEnabled = false;
+
             try
             {
                 using (var client = new TcpClient(host, port))
@@ -150,6 +152,8 @@ namespace StrodeloCompanion
             {
                 ProgressBar.Visibility = Visibility.Collapsed;
                 ProgressPercentageTextBlock.Visibility = Visibility.Collapsed;
+
+                SendFileButton.IsEnabled = true;
             }
         
 
