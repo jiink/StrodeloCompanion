@@ -59,7 +59,7 @@ namespace StrodeloCompanion
 
 
                 // Optional delay to let the user read the message
-                await Task.Delay(5000); //5s
+                await Task.Delay(100); //5s
 
                 StatusTextBlock.Visibility = Visibility.Collapsed; // Hide status message
                 CheckProgressBar.Visibility = Visibility.Collapsed; // Hide loading indicator
@@ -141,7 +141,10 @@ namespace StrodeloCompanion
                         Debug.WriteLine($"Bytes sent: {totalBytesSent} / {fileLength} ({progress:F2}%)");
                     }
 
-                    MessageBox.Show("File transfer completed!");
+                    Task.Run(() =>
+                    {
+                        MessageBox.Show("File transfer completed!");
+                    });
                 }
             }
             catch (Exception ex)
