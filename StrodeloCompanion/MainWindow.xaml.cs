@@ -45,6 +45,8 @@ namespace StrodeloCompanion
                 DeviceStatusTextBlock.Visibility = Visibility.Visible; // Show the error message
                 DeviceStatusTextBlock.Text = "Status: Invalid IP address!";
                 PairButton.IsEnabled = true;
+
+                SendFileButton.IsEnabled = false;
             }
             else
             {
@@ -73,11 +75,15 @@ namespace StrodeloCompanion
                 {
                     DeviceStatusTextBlock1.Visibility = Visibility.Visible; // Show success message
                     DeviceStatusTextBlock1.Text = "Status: Device successfully paired!";
+
+                    SendFileButton.IsEnabled = true;
                 }
                 else
                 {
                     DeviceStatusTextBlock.Visibility = Visibility.Visible; // Show error message for no device found
                     DeviceStatusTextBlock.Text = "Status: No device found at this IP address.";
+
+                    SendFileButton.IsEnabled = false;
                 }
                 
             }
