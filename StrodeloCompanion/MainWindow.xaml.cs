@@ -126,6 +126,14 @@ namespace StrodeloCompanion
                 using (var stream = client.GetStream())
                 using (var fileStream = File.OpenRead(filePath))
                 {
+                    string fileName = Path.GetFileName(filePath);
+                    byte[] fileNameBytes = System.Text.Encoding.UTF8.GetBytes(fileName);
+
+                    byte[] fileNameLength = BitConverter.GetBytes(fileNameBytes.Length);
+                    await stream.WriteAsync(fileNameLength, 0, fileNameLength.Length);
+
+                    await stream.WriteAsync(fileNameBytes, 0, fileNameBytes.Length);
+
                     byte[] buffer = new byte[81920]; // 80KB buffer size
                     int bytesRead;
                     long totalBytesSent = 0;
