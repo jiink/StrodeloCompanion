@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Windows.Controls;
 using System.Windows.Media;
 
+
 namespace StrodeloCompanion
 {
     /// <summary>
@@ -118,6 +119,8 @@ namespace StrodeloCompanion
 
             ProgressPercentageTextBlock.Visibility = Visibility.Visible;
 
+            FileStatus.Visibility = Visibility.Collapsed;
+
             SendFileButton.IsEnabled = false;
 
             try
@@ -128,10 +131,8 @@ namespace StrodeloCompanion
                 {
                     string fileName = Path.GetFileName(filePath);
                     byte[] fileNameBytes = System.Text.Encoding.UTF8.GetBytes(fileName);
-
                     byte[] fileNameLength = BitConverter.GetBytes(fileNameBytes.Length);
                     await stream.WriteAsync(fileNameLength, 0, fileNameLength.Length);
-
                     await stream.WriteAsync(fileNameBytes, 0, fileNameBytes.Length);
 
                     byte[] buffer = new byte[81920]; // 80KB buffer size
@@ -139,6 +140,7 @@ namespace StrodeloCompanion
                     long totalBytesSent = 0;
                     long fileLength = fileStream.Length;
 
+                    
                     ProgressBar.Value = 0; // Reset progress bar
                     ProgressPercentageTextBlock.Text = "0%"; // Reset percentage display
 
@@ -153,12 +155,11 @@ namespace StrodeloCompanion
                         ProgressPercentageTextBlock.Text = $"{progress:F2}%";
 
                         Debug.WriteLine($"Bytes sent: {totalBytesSent} / {fileLength} ({progress:F2}%)");
+
+                        
                     }
 
-                    Task.Run(() =>
-                    {
-                        MessageBox.Show("File transfer completed!");
-                    });
+
                 }
             }
             catch (Exception ex)
@@ -169,6 +170,8 @@ namespace StrodeloCompanion
             {
                 ProgressBar.Visibility = Visibility.Collapsed;
                 ProgressPercentageTextBlock.Visibility = Visibility.Collapsed;
+                FileStatus.Visibility = Visibility.Collapsed;
+                FileStatus.Visibility = Visibility.Visible;
 
                 SendFileButton.IsEnabled = true;
             }
@@ -272,6 +275,8 @@ namespace StrodeloCompanion
             // Optional: Add hash check or file extension validation here
             return true;
         }
+
+
     }
 
 

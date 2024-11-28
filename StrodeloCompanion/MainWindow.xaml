@@ -1,106 +1,60 @@
 ﻿<Window x:Class="StrodeloCompanion.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:StrodeloCompanion"
-        mc:Ignorable="d"
         Title="Strodelo Companion" Height="450" Width="800">
     <Grid Background="#3C2970">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="88*"/>
-            <ColumnDefinition Width="312*"/>
-            <ColumnDefinition Width="123*"/>
-            <ColumnDefinition Width="277*"/>
-        </Grid.ColumnDefinitions>
-        <TextBox x:Name="IpAddressBox" Grid.Row="0" Grid.Column="0" Text="127.0.0.1" FontSize="30" Margin="40,81,40,81" VerticalContentAlignment="Center" Height="55" Padding="5" Grid.ColumnSpan="2"/>
-        <Button x:Name="PairButton" Click="PairButton_Click" Grid.Row="0" Grid.Column="2" Content="Pair" Margin="80,80,80,80" FontSize="30" Grid.ColumnSpan="2"/>
-        <Button x:Name="SendFileButton"
-                Click="SendFileButton_Click" 
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
-                Content="Send file"
-                FontSize="30"
-                Margin="40,40,10,117"/>
+        <!-- Toolbar Section with Combined StackPanel -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Background="#4C2A8B" Height="60">
+            <Button Content="⚙" FontSize="24" Width="60" Background="Transparent"  Foreground="White" BorderThickness="0" Margin="10,10,5,10"/>
+            <TextBox x:Name="IpAddressBox" Text="127.0.0.1" Background="Transparent" BorderBrush="Pink"  Foreground="White" FontSize="26" Width="250" Margin="5,10,10,10" VerticalContentAlignment="Center"/>
+            <Button x:Name="PairButton" Content="Pair"  Background="Transparent" Foreground="White"  BorderBrush="Pink" FontSize="20" Width="100" Margin="5,10,10,10" Click="PairButton_Click"/>
+            <TextBlock x:Name="DeviceStatusTextBlock1" Text="Status: Device successfully paired!" Foreground="Lime" FontSize="16" Visibility="Collapsed" VerticalAlignment="Center" Margin="10,10,5,10"/>
+            <Ellipse Width="20" Height="20" Fill="Lime" VerticalAlignment="Center" Margin="2,10,10,10"/>
+
+        </StackPanel>
 
 
-        <TextBlock x:Name="DeviceStatusTextBlock"
-           Foreground="Black" 
-           FontSize="20"
-           Background="Orange"        
-           Visibility="Collapsed" 
-           VerticalAlignment="Top" Margin="40,148,102,0" Grid.ColumnSpan="3" Height="37" />
+        <!-- File Transfer Section -->
+        <StackPanel  Orientation="Horizontal" Margin="200,0,0,5" VerticalAlignment="Bottom" Background="Transparent" Height="30">
 
-        <TextBlock x:Name="DeviceStatusTextBlock1"
-           Foreground="Black" 
-           FontSize="20"
-           Background="Green"        
-           Visibility="Collapsed" 
-           VerticalAlignment="Top" Margin="40,148,102,0" Grid.ColumnSpan="3" Height="37" />
+            <Button x:Name="SendFileButton" Content="Send File" FontSize="20"  Background="White"  Foreground="Black" Margin="80,0,0,0" Click="SendFileButton_Click"/>
+            <TextBlock x:Name="ProgressPercentageTextBlock" Text="0%" FontSize="16" Foreground="White" Visibility="Collapsed" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+            <ProgressBar x:Name="ProgressBar" Height="20" Margin="20,10,20,10"  Visibility="Collapsed" Width="243"/>
 
+            <TextBox x:Name="FileStatus" Text="File Sucessfully Transferd" Background="#3C2970"  BorderBrush="#3C2970"  Foreground="Lime" FontSize="16" Width="250"  Height="30" Visibility="Collapsed" Margin="-450,0,0,-5"/>
+            
 
-        <TextBlock x:Name="StatusTextBlock" Grid.ColumnSpan="2"
-           Foreground="White" 
-           Background="Black"
-           FontSize="20"
-           Visibility="Collapsed" 
-           HorizontalAlignment="Left" 
-           VerticalAlignment="Top" Width="197" Margin="40,206,0,0" Grid.RowSpan="2" />
+        </StackPanel>
 
+        <!-- Drag and Drop Area -->
+        <Border x:Name="FileDropBorder" BorderBrush="White" BorderThickness="3" AllowDrop="True"
+                DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"
+                Background="#3C2970" CornerRadius="10" Margin="40,80,40,40">
+            <Grid>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock x:Name="DropText" Text="Drag and Drop" FontSize="30" Foreground="White" HorizontalAlignment="Center"/>
+                    <TextBlock Text="or click to browse" FontSize="16" Foreground="#B3B3B3" HorizontalAlignment="Center"/>
+                    <TextBlock Text=".fbx, .gltf, .gif, .obj, .stl, .3mf, .dae, .jpg, .png" FontSize="14" Foreground="#B3B3B3" HorizontalAlignment="Center" Margin="0,10,0,0"/>
 
-        <ProgressBar x:Name="CheckProgressBar" Grid.Row="1" Grid.ColumnSpan="2"
-             IsIndeterminate="True" 
-             Visibility="Collapsed" 
-             Height="20" 
-             Margin="40,24,40,173"/>
-
-        <ProgressBar x:Name="FileTransferProgressBar" 
-                     Grid.Row="1" Grid.Column="1" 
-                     Height="30" 
-                     Minimum="0" Maximum="100" 
-                     Visibility="Collapsed" 
-                     Margin="172,182,260,5" Grid.ColumnSpan="3"/>
-
-        <Canvas Grid.Row="2" Grid.ColumnSpan="2">
-            <ProgressBar x:Name="ProgressBar"
-                 Width="300"
-                 Height="25"
-                 Minimum="0"
-                 Maximum="100"
-                 Visibility="Collapsed" 
-                 Canvas.Left="254"
-                 Canvas.Top="176" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <TextBlock x:Name="ProgressPercentageTextBlock"
-               FontSize="18"
-               Canvas.Left="391"  
-               Canvas.Top="175"
-               Visibility="Collapsed" 
-               Text="0%"/>
-        </Canvas>
-
-
-        <Border x:Name="FileDropBorder" Grid.ColumnSpan="2"
-        BorderBrush="Gray" 
-        BorderThickness="2"
-        AllowDrop="True"
-        DragEnter="OnDragEnter"
-        DragLeave="OnDragLeave"
-        Drop="OnDrop"
-        Background="LightGray"
-        Height="200"
-        Margin="40,179,40,55"
-        CornerRadius="10" Grid.Column="2" Grid.RowSpan="2">
-            <TextBlock x:Name="DropText" 
-               Text="Drag and Drop File Here" 
-               VerticalAlignment="Center" 
-               HorizontalAlignment="Center" 
-               FontSize="20" 
-               Foreground="Black"/>
+                </StackPanel>
+            </Grid>
         </Border>
+
+        <!-- Status Messages -->
+        <TextBlock x:Name="DeviceStatusTextBlock" Foreground="Red" FontSize="16" Visibility="Collapsed" 
+                   Margin="10,60,10,10" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <TextBlock x:Name="StatusTextBlock" Foreground="White" FontSize="16" Visibility="Collapsed" 
+                   Margin="10,80,10,10" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <!-- Progress Indicator -->
+        <ProgressBar x:Name="CheckProgressBar" 
+                     Height="20" 
+                     Width="200" 
+                     Visibility="Collapsed" 
+                     VerticalAlignment="Top" 
+                     HorizontalAlignment="Center" 
+                     Margin="10,100,10,10"/>
+
 
     </Grid>
 </Window>
