@@ -8,9 +8,7 @@
             <Button Content="⚙" FontSize="24" Width="60" Background="Transparent"  Foreground="White" BorderThickness="0" Margin="10,10,5,10"/>
             <TextBox x:Name="IpAddressBox" Text="127.0.0.1" Background="Transparent" BorderBrush="Pink"  Foreground="White" FontSize="26" Width="250" Margin="5,10,10,10" VerticalContentAlignment="Center"/>
             <Button x:Name="PairButton" Content="Pair"  Background="Transparent" Foreground="White"  BorderBrush="Pink" FontSize="20" Width="100" Margin="5,10,10,10" Click="PairButton_Click"/>
-            <TextBlock x:Name="DeviceStatusTextBlock1" Text="Status: Device successfully paired!" Foreground="Lime" FontSize="16" Visibility="Collapsed" VerticalAlignment="Center" Margin="10,10,5,10"/>
-            <Ellipse Width="20" Height="20" Fill="Lime" VerticalAlignment="Center" Margin="2,10,10,10"/>
-
+            <TextBlock x:Name="DeviceStatusTextBlock" Text="Sample status text ❓" Foreground="Lime" FontSize="16" Visibility="Visible" VerticalAlignment="Center" Margin="10,10,5,10"/>
         </StackPanel>
 
 
@@ -39,12 +37,6 @@
                 </StackPanel>
             </Grid>
         </Border>
-
-        <!-- Status Messages -->
-        <TextBlock x:Name="DeviceStatusTextBlock" Foreground="Red" FontSize="16" Visibility="Collapsed" 
-                   Margin="10,60,10,10" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <TextBlock x:Name="StatusTextBlock" Foreground="White" FontSize="16" Visibility="Collapsed" 
-                   Margin="10,80,10,10" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
         <!-- Progress Indicator -->
         <ProgressBar x:Name="CheckProgressBar" 

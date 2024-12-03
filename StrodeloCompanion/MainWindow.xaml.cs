@@ -28,6 +28,8 @@ namespace StrodeloCompanion
             config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             configSection = config.AppSettings.Settings;
             IpAddressBox.Text = configSection["EnteredIpAddress"].Value;
+            DeviceStatusTextBlock.Text = "Pair a device to begin 🥽";
+            DeviceStatusTextBlock.Foreground = Brushes.Yellow;
         }
 
         private void SaveConfig()
@@ -35,8 +37,6 @@ namespace StrodeloCompanion
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection(config.AppSettings.SectionInformation.Name);
         }
-
-
 
         private async void PairButton_Click(object sender, RoutedEventArgs e)
         {
@@ -46,11 +46,6 @@ namespace StrodeloCompanion
             configSection["EnteredIpAddress"].Value = ipAddressString;
             SaveConfig();
 
-            // Hide previous messages initially
-            DeviceStatusTextBlock.Visibility = Visibility.Collapsed;
-            DeviceStatusTextBlock1.Visibility = Visibility.Collapsed;
-
-            StatusTextBlock.Visibility = Visibility.Collapsed; // Hide status text initially
             CheckProgressBar.Visibility = Visibility.Collapsed; // Hide loading indicator
             PairButton.IsEnabled = false; // Disable the pair button
 
@@ -59,7 +54,8 @@ namespace StrodeloCompanion
             {
                 // Show error message for invalid IP address format
                 DeviceStatusTextBlock.Visibility = Visibility.Visible; // Show the error message
-                DeviceStatusTextBlock.Text = "Status: Invalid IP address!";
+                DeviceStatusTextBlock.Text = "Invalid IP address ❌";
+                DeviceStatusTextBlock.Foreground = Brushes.Red;
                 PairButton.IsEnabled = true;
 
                 SendFileButton.IsEnabled = false;
@@ -67,41 +63,31 @@ namespace StrodeloCompanion
             else
             {
                 // Show status text and loading indicator
-                StatusTextBlock.Visibility = Visibility.Visible; // Show status text
-                StatusTextBlock.Text = "Checking for device..."; // Set initial status message
+                DeviceStatusTextBlock.Text = "Checking for device... ℹ"; // Set initial status message
+                DeviceStatusTextBlock.Foreground = Brushes.White;
                 CheckProgressBar.Visibility = Visibility.Visible; // Show loading indicator
-
-
                 // Run CheckDeviceExists on a separate task to avoid blocking the UI
                 bool deviceExists = await Task.Run(() => CheckDeviceExists(pairedDeviceAddress));
-
-
                 // Optional delay to let the user read the message
                 await Task.Delay(100); //5s
-
-                StatusTextBlock.Visibility = Visibility.Collapsed; // Hide status message
                 CheckProgressBar.Visibility = Visibility.Collapsed; // Hide loading indicator
-
                 // Re-enable the pair button
                 PairButton.IsEnabled = true;
-
-
                 // Check the device existence and update the status
                 if (deviceExists)
                 {
-                    DeviceStatusTextBlock1.Visibility = Visibility.Visible; // Show success message
-                    DeviceStatusTextBlock1.Text = "Status: Device successfully paired!";
-
+                    // Show success message
+                    DeviceStatusTextBlock.Text = "Device paired ✅";
+                    DeviceStatusTextBlock.Foreground = Brushes.Lime;
                     SendFileButton.IsEnabled = true;
                 }
                 else
                 {
                     DeviceStatusTextBlock.Visibility = Visibility.Visible; // Show error message for no device found
-                    DeviceStatusTextBlock.Text = "Status: No device found at this IP address.";
-
+                    DeviceStatusTextBlock.Text = "Not found ❌";
+                    DeviceStatusTextBlock.Foreground = Brushes.Red;
                     SendFileButton.IsEnabled = false;
                 }
-                
             }
         }
 
@@ -122,9 +108,6 @@ namespace StrodeloCompanion
                 return false;
             }
         }
-
-
-
 
         // Given a file path, load the file and send its contents to the given host (e.g. 192.168.50.122:8111)
         public async void SendFile(string filePath, string host, int port)
@@ -169,12 +152,8 @@ namespace StrodeloCompanion
                         ProgressBar.Value = progress;
                         ProgressPercentageTextBlock.Text = $"{progress:F2}%";
 
-                        Debug.WriteLine($"Bytes sent: {totalBytesSent} / {fileLength} ({progress:F2}%)");
-
-                        
+                        Debug.WriteLine($"Bytes sent: {totalBytesSent} / {fileLength} ({progress:F2}%)");   
                     }
-
-
                 }
             }
             catch (Exception ex)
@@ -280,8 +259,6 @@ namespace StrodeloCompanion
             DropText.Foreground = new SolidColorBrush(Colors.Black);            // Reset text color
         }
 
-
-
         // Verify the integrity of the file (hash check, file size check, etc.)
         private bool VerifyFileIntegrity(string filePath)
         {
@@ -295,12 +272,5 @@ namespace StrodeloCompanion
             // Optional: Add hash check or file extension validation here
             return true;
         }
-
-
     }
-
-
-
-
-
 }
