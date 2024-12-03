@@ -24,8 +24,18 @@
         Background="#3C2970" Margin="15 5" Padding="40">
             <Grid>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <!--image aspect ratio is 4:1-->
-                    <Rectangle Width="320" Height="80">
+                    <!--Show this and hide the other when no device is paired
+                    and you can't use this area. image aspect ratio is 3:2-->
+                    <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon" Visibility="Visible">
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="#9526E0"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <ImageBrush ImageSource="pack://application:,,,/noDeviceIcon.png"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <!--Show this and hide the other when you can use this area. image aspect ratio is 4:1-->
+                    <Rectangle Width="320" Height="80" x:Name="YesDeviceIcon" Visibility="Collapsed">
                         <Rectangle.Fill>
                             <SolidColorBrush Color="#9526E0"/>
                         </Rectangle.Fill>

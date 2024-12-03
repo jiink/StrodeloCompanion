@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="noDeviceIcon.png" />
     <None Remove="transferIcons.png" />
   </ItemGroup>
 
@@ -24,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="noDeviceIcon.png" />
     <Resource Include="transferIcons.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
