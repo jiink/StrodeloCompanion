@@ -7,6 +7,8 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Documents;
+using System.Configuration;
 
 
 namespace StrodeloCompanion
@@ -17,10 +19,21 @@ namespace StrodeloCompanion
     public partial class MainWindow : Window
     {
         IPAddress pairedDeviceAddress;
+        Configuration config;
+        KeyValueConfigurationCollection configSection;
 
         public MainWindow()
         {
             InitializeComponent();
+            config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            configSection = config.AppSettings.Settings;
+            IpAddressBox.Text = configSection["EnteredIpAddress"].Value;
+        }
+
+        private void SaveConfig()
+        {
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection(config.AppSettings.SectionInformation.Name);
         }
 
 
@@ -30,6 +43,8 @@ namespace StrodeloCompanion
             Debug.WriteLine("Pairing button clicked");
 
             string ipAddressString = IpAddressBox.Text;
+            configSection["EnteredIpAddress"].Value = ipAddressString;
+            SaveConfig();
 
             // Hide previous messages initially
             DeviceStatusTextBlock.Visibility = Visibility.Collapsed;
@@ -99,7 +114,7 @@ namespace StrodeloCompanion
 
             try
             {
-                reply = ping.Send(ipAddress, 1000);
+                reply = ping.Send(ipAddress, 500);
                 return reply.Status == IPStatus.Success;
             }
             catch (PingException)
@@ -185,9 +200,14 @@ namespace StrodeloCompanion
         // Button click event for selecting and sending a file
         private void SendFileButton_Click(object sender, RoutedEventArgs e)
         {
+            if (pairedDeviceAddress is null || string.IsNullOrEmpty(pairedDeviceAddress.ToString()) || !CheckDeviceExists(pairedDeviceAddress))
+            {
+                MessageBox.Show("Please pair a device first.");
+                return;
+            }
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             openFileDialog.Title = "Open File...";
-            openFileDialog.Filter = "3D Files (*.obj;*.glb;*.gltf;*.fbx)|*.obj;*.glb;*.gltf;*.fbx";
+            openFileDialog.Filter = "3D Files (*.obj;*.glb;*.gltf;*.fbx;*.stl;*.ply;*.3mf;*.dae;*.png;*.jpg;*.hdr)|*.obj;*.glb;*.gltf;*.fbx;*.stl;*.ply;*.3mf;*.dae;*.png;*.jpg;*.hdr";
 
             if (openFileDialog.ShowDialog() == true)
             {
