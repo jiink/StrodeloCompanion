@@ -22,6 +22,9 @@ namespace StrodeloCompanion
         Configuration config;
         KeyValueConfigurationCollection configSection;
 
+        Brush fileSubmissionAreaOgBackground; // just used to restore normal brush when drag and drop is done
+        Brush fileSubmissionAreaOgBorder;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -30,6 +33,8 @@ namespace StrodeloCompanion
             IpAddressBox.Text = configSection["EnteredIpAddress"].Value;
             DeviceStatusTextBlock.Text = "Pair a device to begin 🥽";
             DeviceStatusTextBlock.Foreground = Brushes.Yellow;
+            fileSubmissionAreaOgBackground = FileSubmissionArea.Background;
+            fileSubmissionAreaOgBorder = FileSubmissionArea.BorderBrush;
         }
 
         private void SaveConfig()
@@ -58,7 +63,7 @@ namespace StrodeloCompanion
                 DeviceStatusTextBlock.Foreground = Brushes.Red;
                 PairButton.IsEnabled = true;
 
-                SendFileButton.IsEnabled = false;
+                FileSubmissionArea.IsEnabled = false;
             }
             else
             {
@@ -79,14 +84,14 @@ namespace StrodeloCompanion
                     // Show success message
                     DeviceStatusTextBlock.Text = "Device paired ✅";
                     DeviceStatusTextBlock.Foreground = Brushes.Lime;
-                    SendFileButton.IsEnabled = true;
+                    FileSubmissionArea.IsEnabled = true;
                 }
                 else
                 {
                     DeviceStatusTextBlock.Visibility = Visibility.Visible; // Show error message for no device found
                     DeviceStatusTextBlock.Text = "Not found ❌";
                     DeviceStatusTextBlock.Foreground = Brushes.Red;
-                    SendFileButton.IsEnabled = false;
+                    FileSubmissionArea.IsEnabled = false;
                 }
             }
         }
@@ -119,7 +124,7 @@ namespace StrodeloCompanion
 
             FileStatus.Visibility = Visibility.Collapsed;
 
-            SendFileButton.IsEnabled = false;
+            FileSubmissionArea.IsEnabled = false;
 
             try
             {
@@ -167,7 +172,7 @@ namespace StrodeloCompanion
                 FileStatus.Visibility = Visibility.Collapsed;
                 FileStatus.Visibility = Visibility.Visible;
 
-                SendFileButton.IsEnabled = true;
+                FileSubmissionArea.IsEnabled = true;
             }
         
 
@@ -177,7 +182,7 @@ namespace StrodeloCompanion
         }
 
         // Button click event for selecting and sending a file
-        private void SendFileButton_Click(object sender, RoutedEventArgs e)
+        private void FileSubmissionArea_Click(object sender, RoutedEventArgs e)
         {
             if (pairedDeviceAddress is null || string.IsNullOrEmpty(pairedDeviceAddress.ToString()) || !CheckDeviceExists(pairedDeviceAddress))
             {
@@ -211,8 +216,8 @@ namespace StrodeloCompanion
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                FileDropBorder.Background = new SolidColorBrush(Colors.LightGreen);  // Change background to green
-                FileDropBorder.BorderBrush = new SolidColorBrush(Colors.Green);      // Change border to green
+                FileSubmissionArea.Background = new SolidColorBrush(Colors.LightGreen);  // Change background to green
+                FileSubmissionArea.BorderBrush = new SolidColorBrush(Colors.Green);      // Change border to green
                 DropText.Text = "Release to Drop";                                    // Change the text
                 DropText.Foreground = new SolidColorBrush(Colors.White);              // Change text color for better visibility
                 e.Effects = DragDropEffects.Copy;                                     // Set the effect to 'copy' (indicating a valid drop)
@@ -253,8 +258,8 @@ namespace StrodeloCompanion
         // Helper method to reset the drag-and-drop area to its default state
         private void ResetDragDropArea()
         {
-            FileDropBorder.Background = new SolidColorBrush(Colors.LightGray); // Reset background
-            FileDropBorder.BorderBrush = new SolidColorBrush(Colors.Gray);      // Reset border
+            FileSubmissionArea.Background = fileSubmissionAreaOgBackground; // Reset background
+            FileSubmissionArea.BorderBrush = fileSubmissionAreaOgBorder;      // Reset border
             DropText.Text = "Drag and Drop File Here";                          // Reset text
             DropText.Foreground = new SolidColorBrush(Colors.Black);            // Reset text color
         }

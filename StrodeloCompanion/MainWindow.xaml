@@ -4,39 +4,43 @@
         Title="Strodelo Companion" Height="450" Width="800">
     <Grid Background="#3C2970">
         <!-- Toolbar Section with Combined StackPanel -->
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Background="#4C2A8B" Height="60">
-            <Button Content="⚙" FontSize="24" Width="60" Background="Transparent"  Foreground="White" BorderThickness="0" Margin="10,10,5,10"/>
-            <TextBox x:Name="IpAddressBox" Text="127.0.0.1" Background="Transparent" BorderBrush="Pink"  Foreground="White" FontSize="26" Width="250" Margin="5,10,10,10" VerticalContentAlignment="Center"/>
-            <Button x:Name="PairButton" Content="Pair"  Background="Transparent" Foreground="White"  BorderBrush="Pink" FontSize="20" Width="100" Margin="5,10,10,10" Click="PairButton_Click"/>
-            <TextBlock x:Name="DeviceStatusTextBlock" Text="Sample status text ❓" Foreground="Lime" FontSize="16" Visibility="Visible" VerticalAlignment="Center" Margin="10,10,5,10"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Background="#3C2970" Height="60">
+            <Button Content="⚙" FontSize="30" Width="60" Background="#9526E0" Foreground="#3C2970" FontWeight="UltraBold" BorderThickness="0" Margin="7"/>
+            <TextBox x:Name="IpAddressBox" Text="127.0.0.1" Background="Transparent" BorderBrush="#9526E0" BorderThickness="5"  Foreground="White" FontSize="26" Width="250" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="5 2" FontWeight="SemiBold"/>
+            <Button x:Name="PairButton" Content="Pair"  Background="#9526E0" Foreground="White"  BorderBrush="#9526E0" BorderThickness="1" FontSize="25" FontWeight="SemiBold" Padding="20 0"  Margin="5,10,10,10" Click="PairButton_Click"/>
+            <TextBlock x:Name="DeviceStatusTextBlock" Text="Sample status text ❓" Foreground="Lime" FontSize="25" Visibility="Visible" VerticalAlignment="Center" Margin="10,10,5,10"/>
         </StackPanel>
 
 
         <!-- File Transfer Section -->
         <StackPanel  Orientation="Horizontal" Margin="200,0,0,5" VerticalAlignment="Bottom" Background="Transparent" Height="30">
-
-            <Button x:Name="SendFileButton" Content="Send File" FontSize="20"  Background="White"  Foreground="Black" Margin="80,0,0,0" Click="SendFileButton_Click"/>
             <TextBlock x:Name="ProgressPercentageTextBlock" Text="0%" FontSize="16" Foreground="White" Visibility="Collapsed" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
             <ProgressBar x:Name="ProgressBar" Height="20" Margin="20,10,20,10"  Visibility="Collapsed" Width="243"/>
 
-            <TextBox x:Name="FileStatus" Text="File Sucessfully Transferd" Background="#3C2970"  BorderBrush="#3C2970"  Foreground="Lime" FontSize="16" Width="250"  Height="30" Visibility="Collapsed" Margin="-450,0,0,-5"/>
-            
-
+            <TextBox x:Name="FileStatus" Text="File Sucessfully Transferred" Background="#3C2970"  BorderBrush="#3C2970"  Foreground="Lime" FontSize="16" Width="250"  Height="30" Visibility="Collapsed" Margin="-450,0,0,-5"/>
         </StackPanel>
 
         <!-- Drag and Drop Area -->
-        <Border x:Name="FileDropBorder" BorderBrush="White" BorderThickness="3" AllowDrop="True"
+        <Button x:Name="FileSubmissionArea" BorderBrush="White" BorderThickness="6" AllowDrop="True"
                 DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"
-                Background="#3C2970" CornerRadius="10" Margin="40,80,40,40">
+                Click="FileSubmissionArea_Click"
+                Background="#3C2970" Margin="40,80,40,40">
             <Grid>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock x:Name="DropText" Text="Drag and Drop" FontSize="30" Foreground="White" HorizontalAlignment="Center"/>
-                    <TextBlock Text="or click to browse" FontSize="16" Foreground="#B3B3B3" HorizontalAlignment="Center"/>
-                    <TextBlock Text=" .obj, .glb, .gltf, .fbx, .stl, .ply, .3mf, .dae, .png, .jpg, .hdr" FontSize="14" Foreground="#B3B3B3" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-
+                    <Rectangle Width="320" Height="80"> <!--image aspect ratio is 4:1-->
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="#9526E0"/>
+                        </Rectangle.Fill>
+                        <Rectangle.OpacityMask>
+                            <ImageBrush ImageSource="pack://application:,,,/transferIcons.png"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock x:Name="DropText" Text="Drag &#38; Drop" FontSize="45" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                    <TextBlock Text="or click to browse" FontSize="16" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    <TextBlock Text=" .obj, .glb, .gltf, .fbx, .stl, .ply, .3mf, .dae, .png, .jpg, .hdr" FontSize="14" Foreground="#9526E0" HorizontalAlignment="Center" Margin="0,10,0,0"/>
                 </StackPanel>
             </Grid>
-        </Border>
+        </Button>
 
         <!-- Progress Indicator -->
         <ProgressBar x:Name="CheckProgressBar" 
