@@ -35,6 +35,8 @@ namespace StrodeloCompanion
             DeviceStatusTextBlock.Foreground = Brushes.Yellow;
             fileSubmissionAreaOgBackground = FileSubmissionArea.Background;
             fileSubmissionAreaOgBorder = FileSubmissionArea.BorderBrush;
+            ProgressIndicator.Visibility = Visibility.Collapsed;
+            FileStatus.Visibility = Visibility.Collapsed;
         }
 
         private void SaveConfig()
@@ -50,15 +52,13 @@ namespace StrodeloCompanion
             string ipAddressString = IpAddressBox.Text;
             configSection["EnteredIpAddress"].Value = ipAddressString;
             SaveConfig();
-
-            CheckProgressBar.Visibility = Visibility.Collapsed; // Hide loading indicator
-            PairButton.IsEnabled = false; // Disable the pair button
+            PairButton.IsEnabled = false;
 
             // Check for valid IP address format
             if (!IPAddress.TryParse(ipAddressString, out pairedDeviceAddress))
             {
                 // Show error message for invalid IP address format
-                DeviceStatusTextBlock.Visibility = Visibility.Visible; // Show the error message
+                DeviceStatusTextBlock.Visibility = Visibility.Visible;
                 DeviceStatusTextBlock.Text = "Invalid IP address ❌";
                 DeviceStatusTextBlock.Foreground = Brushes.Red;
                 PairButton.IsEnabled = true;
@@ -68,14 +68,12 @@ namespace StrodeloCompanion
             else
             {
                 // Show status text and loading indicator
-                DeviceStatusTextBlock.Text = "Checking for device... ℹ"; // Set initial status message
+                DeviceStatusTextBlock.Text = "Checking for device... ℹ";
                 DeviceStatusTextBlock.Foreground = Brushes.White;
-                CheckProgressBar.Visibility = Visibility.Visible; // Show loading indicator
                 // Run CheckDeviceExists on a separate task to avoid blocking the UI
                 bool deviceExists = await Task.Run(() => CheckDeviceExists(pairedDeviceAddress));
                 // Optional delay to let the user read the message
                 await Task.Delay(100); //5s
-                CheckProgressBar.Visibility = Visibility.Collapsed; // Hide loading indicator
                 // Re-enable the pair button
                 PairButton.IsEnabled = true;
                 // Check the device existence and update the status
@@ -102,7 +100,6 @@ namespace StrodeloCompanion
         {
             Ping ping = new Ping();
             PingReply reply;
-
             try
             {
                 reply = ping.Send(ipAddress, 500);
@@ -120,7 +117,7 @@ namespace StrodeloCompanion
             ProgressBar.Visibility = Visibility.Visible;
             ProgressBar.Value = 0;
 
-            ProgressPercentageTextBlock.Visibility = Visibility.Visible;
+            ProgressIndicator.Visibility = Visibility.Visible;
 
             FileStatus.Visibility = Visibility.Collapsed;
 
@@ -145,7 +142,7 @@ namespace StrodeloCompanion
 
                     
                     ProgressBar.Value = 0; // Reset progress bar
-                    ProgressPercentageTextBlock.Text = "0%"; // Reset percentage display
+                    ProgressPercentageText.Content = "0%"; // Reset percentage display
 
                     while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
                     {
@@ -155,7 +152,7 @@ namespace StrodeloCompanion
                         // Calculate the percentage and update UI
                         double progress = (double)totalBytesSent / fileLength * 100;
                         ProgressBar.Value = progress;
-                        ProgressPercentageTextBlock.Text = $"{progress:F2}%";
+                        ProgressPercentageText.Content = $"{progress:F2}%";
 
                         Debug.WriteLine($"Bytes sent: {totalBytesSent} / {fileLength} ({progress:F2}%)");   
                     }
@@ -163,22 +160,20 @@ namespace StrodeloCompanion
             }
             catch (Exception ex)
             {
+                FileStatus.Content = "File transfer failed";
+                FileStatus.Foreground = Brushes.Red;
                 MessageBox.Show($"File transfer failed: {ex.Message}");
             }
             finally
             {
-                ProgressBar.Visibility = Visibility.Collapsed;
-                ProgressPercentageTextBlock.Visibility = Visibility.Collapsed;
-                FileStatus.Visibility = Visibility.Collapsed;
+                ProgressIndicator.Visibility = Visibility.Collapsed;
+                FileStatus.Content = "File transfer successful";
+                FileStatus.Foreground = Brushes.Lime;
                 FileStatus.Visibility = Visibility.Visible;
-
                 FileSubmissionArea.IsEnabled = true;
             }
-        
-
-        //stream.Close();
-        //client.Close();
-
+            //stream.Close();
+            //client.Close();
         }
 
         // Button click event for selecting and sending a file
@@ -186,7 +181,7 @@ namespace StrodeloCompanion
         {
             if (pairedDeviceAddress is null || string.IsNullOrEmpty(pairedDeviceAddress.ToString()) || !CheckDeviceExists(pairedDeviceAddress))
             {
-                MessageBox.Show("Please pair a device first.");
+                FileStatus.Content = "Pair a device first 😡";
                 return;
             }
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();

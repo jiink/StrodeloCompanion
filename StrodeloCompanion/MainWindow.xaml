@@ -1,33 +1,31 @@
 ﻿<Window x:Class="StrodeloCompanion.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Strodelo Companion" Height="450" Width="800">
+        Title="Strodelo Companion" Height="600" Width="800">
     <Grid Background="#3C2970">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
         <!-- Toolbar Section with Combined StackPanel -->
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Background="#3C2970" Height="60">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" Background="#3C2970" Height="60" Margin="10 0">
             <Button Content="⚙" FontSize="30" Width="60" Background="#9526E0" Foreground="#3C2970" FontWeight="UltraBold" BorderThickness="0" Margin="7"/>
             <TextBox x:Name="IpAddressBox" Text="127.0.0.1" Background="Transparent" BorderBrush="#9526E0" BorderThickness="5"  Foreground="White" FontSize="26" Width="250" VerticalContentAlignment="Center" VerticalAlignment="Center" Padding="5 2" FontWeight="SemiBold"/>
             <Button x:Name="PairButton" Content="Pair"  Background="#9526E0" Foreground="White"  BorderBrush="#9526E0" BorderThickness="1" FontSize="25" FontWeight="SemiBold" Padding="20 0"  Margin="5,10,10,10" Click="PairButton_Click"/>
-            <TextBlock x:Name="DeviceStatusTextBlock" Text="Sample status text ❓" Foreground="Lime" FontSize="25" Visibility="Visible" VerticalAlignment="Center" Margin="10,10,5,10"/>
-        </StackPanel>
-
-
-        <!-- File Transfer Section -->
-        <StackPanel  Orientation="Horizontal" Margin="200,0,0,5" VerticalAlignment="Bottom" Background="Transparent" Height="30">
-            <TextBlock x:Name="ProgressPercentageTextBlock" Text="0%" FontSize="16" Foreground="White" Visibility="Collapsed" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-            <ProgressBar x:Name="ProgressBar" Height="20" Margin="20,10,20,10"  Visibility="Collapsed" Width="243"/>
-
-            <TextBox x:Name="FileStatus" Text="File Sucessfully Transferred" Background="#3C2970"  BorderBrush="#3C2970"  Foreground="Lime" FontSize="16" Width="250"  Height="30" Visibility="Collapsed" Margin="-450,0,0,-5"/>
+            <TextBlock x:Name="DeviceStatusTextBlock" Text="Sample device status ❓" Foreground="Lime" FontSize="25" Visibility="Visible" VerticalAlignment="Center" Margin="10,10,5,10"/>
         </StackPanel>
 
         <!-- Drag and Drop Area -->
-        <Button x:Name="FileSubmissionArea" BorderBrush="White" BorderThickness="6" AllowDrop="True"
-                DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"
-                Click="FileSubmissionArea_Click"
-                Background="#3C2970" Margin="40,80,40,40">
+        <Button Grid.Row="1" x:Name="FileSubmissionArea" BorderBrush="White" BorderThickness="6" AllowDrop="True"
+        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"
+        Click="FileSubmissionArea_Click"
+        Background="#3C2970" Margin="15 5" Padding="40">
             <Grid>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Rectangle Width="320" Height="80"> <!--image aspect ratio is 4:1-->
+                    <!--image aspect ratio is 4:1-->
+                    <Rectangle Width="320" Height="80">
                         <Rectangle.Fill>
                             <SolidColorBrush Color="#9526E0"/>
                         </Rectangle.Fill>
@@ -42,15 +40,17 @@
             </Grid>
         </Button>
 
-        <!-- Progress Indicator -->
-        <ProgressBar x:Name="CheckProgressBar" 
-                     Height="20" 
-                     Width="200" 
-                     Visibility="Collapsed" 
-                     VerticalAlignment="Top" 
-                     HorizontalAlignment="Center" 
-                     Margin="10,100,10,10"/>
-
-
+        <!-- File Status Section -->
+        <Grid Grid.Row="2" Margin="0 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="ProgressIndicator" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Label x:Name="ProgressPercentageText" Content="XX%" FontSize="20" Foreground="White" Visibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <ProgressBar Grid.Column="0" x:Name="ProgressBar" Height="20" Visibility="Visible" Width="300"/>
+            </StackPanel>
+            <Label Grid.Column="1" x:Name="FileStatus" Content="Sample file status" Foreground="Lime" FontSize="24" HorizontalAlignment="Center" VerticalContentAlignment="Center" Visibility="Visible"/>
+        </Grid>
     </Grid>
 </Window>
