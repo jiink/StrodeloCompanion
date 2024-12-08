@@ -39,7 +39,7 @@ namespace StrodeloCompanion
             FileStatus.Visibility = Visibility.Collapsed;
 
             PairFirst.Visibility = Visibility.Visible;
-            PairFirst.Foreground = Brushes.Yellow;
+            //PairFirst.Foreground = Brushes.Yellow;
             FileSubmissionArea.Visibility = Visibility.Collapsed;
         }
 
@@ -67,14 +67,15 @@ namespace StrodeloCompanion
                 DeviceStatusTextBlock.Foreground = Brushes.Red;
                 PairButton.IsEnabled = true;
 
-                PairFirst.Visibility = Visibility.Visible;
-
                 DropText.Visibility = Visibility.Collapsed;
                 DropText1.Visibility = Visibility.Collapsed;
                 DropText2.Visibility = Visibility.Collapsed;
 
                 
                 FileSubmissionArea.Visibility = Visibility.Collapsed;
+                YesDeviceIcon.Visibility = Visibility.Collapsed;
+                NoDeviceIcon.Visibility = Visibility.Visible;
+                PairFirst.Visibility = Visibility.Visible;
             }
             else
             {
@@ -101,7 +102,9 @@ namespace StrodeloCompanion
 
 
                     FileSubmissionArea.Visibility = Visibility.Visible;
-
+                    YesDeviceIcon.Visibility = Visibility.Visible;
+                    NoDeviceIcon.Visibility = Visibility.Collapsed;
+                    PairFirst.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
@@ -116,6 +119,9 @@ namespace StrodeloCompanion
                     DropText2.Visibility = Visibility.Collapsed;
 
                     FileSubmissionArea.Visibility = Visibility.Collapsed;
+                    YesDeviceIcon.Visibility = Visibility.Collapsed;
+                    NoDeviceIcon.Visibility = Visibility.Visible;
+                    PairFirst.Visibility = Visibility.Visible;
                 }
             }
         }
