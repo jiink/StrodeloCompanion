@@ -18,26 +18,43 @@
         </StackPanel>
 
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Background="#3C2970" Height="300" Margin="-15,0,0,100">
-            <TextBlock x:Name="PairFirst" Text="Enter IP and Pair Device" FontSize="45" FontWeight="SemiBold"  Margin="165,190,0,10" VerticalAlignment="Center"   Height="50" Visibility="Visible"  Grid.Row="1"/>
-            <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon1" VerticalAlignment="Center" Margin="-480,0,0,10" Visibility="Visible" Fill="#9526E0">
+        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#3C2970" Height="300" Margin="-15,0,0,100">
+            <!--Show this and hide the other when no device is paired
+            and you can't use this area. image aspect ratio is 3:2-->
+            <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" Visibility="Collapsed" Fill="#9526E0">
                 <Rectangle.OpacityMask>
                     <ImageBrush ImageSource="pack://application:,,,/noDeviceIcon.png"/>
                 </Rectangle.OpacityMask>
             </Rectangle>
+            <TextBlock x:Name="PairFirst" Text="Enter IP and Pair Device" FontSize="45" FontWeight="SemiBold"  Margin="20" VerticalAlignment="Center"   Height="50" Visibility="Visible"  Grid.Row="1"/>
         </StackPanel>
-
-
 
         <!-- Drag and Drop Area -->
         <Button Grid.Row="1" x:Name="FileSubmissionArea" BorderBrush="White" BorderThickness="6" AllowDrop="True" 
-        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"   Visibility="Collapsed"
+        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop" Visibility="Visible"
         Click="FileSubmissionArea_Click"
-        Background="#3C2970" Margin="15 5" Padding="40" >
+        Margin="15 5" Padding="40" >
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Background" Value="#3C2970" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#342360" TargetName="Border" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
             <Grid>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <!--Show this and hide the other when no device is paired
-                    and you can't use this area. image aspect ratio is 3:2-->
                     <!--Show this and hide the other when you can use this area. image aspect ratio is 4:1-->
                     <Rectangle Width="320" Height="80" x:Name="YesDeviceIcon" Visibility="Collapsed">
                         <Rectangle.Fill>
