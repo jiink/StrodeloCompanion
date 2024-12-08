@@ -37,6 +37,10 @@ namespace StrodeloCompanion
             fileSubmissionAreaOgBorder = FileSubmissionArea.BorderBrush;
             ProgressIndicator.Visibility = Visibility.Collapsed;
             FileStatus.Visibility = Visibility.Collapsed;
+
+            PairFirst.Visibility = Visibility.Visible;
+            PairFirst.Foreground = Brushes.Yellow;
+            FileSubmissionArea.Visibility = Visibility.Collapsed;
         }
 
         private void SaveConfig()
@@ -63,7 +67,14 @@ namespace StrodeloCompanion
                 DeviceStatusTextBlock.Foreground = Brushes.Red;
                 PairButton.IsEnabled = true;
 
-                FileSubmissionArea.IsEnabled = false;
+                PairFirst.Visibility = Visibility.Visible;
+
+                DropText.Visibility = Visibility.Collapsed;
+                DropText1.Visibility = Visibility.Collapsed;
+                DropText2.Visibility = Visibility.Collapsed;
+
+                
+                FileSubmissionArea.Visibility = Visibility.Collapsed;
             }
             else
             {
@@ -83,6 +94,14 @@ namespace StrodeloCompanion
                     DeviceStatusTextBlock.Text = "Device paired ✅";
                     DeviceStatusTextBlock.Foreground = Brushes.Lime;
                     FileSubmissionArea.IsEnabled = true;
+
+                    DropText.Visibility = Visibility.Visible;
+                    DropText1.Visibility = Visibility.Visible;
+                    DropText2.Visibility = Visibility.Visible;
+
+
+                    FileSubmissionArea.Visibility = Visibility.Visible;
+
                 }
                 else
                 {
@@ -90,6 +109,13 @@ namespace StrodeloCompanion
                     DeviceStatusTextBlock.Text = "Not found ❌";
                     DeviceStatusTextBlock.Foreground = Brushes.Red;
                     FileSubmissionArea.IsEnabled = false;
+
+
+                    DropText.Visibility = Visibility.Collapsed;
+                    DropText1.Visibility = Visibility.Collapsed;
+                    DropText2.Visibility = Visibility.Collapsed;
+
+                    FileSubmissionArea.Visibility = Visibility.Collapsed;
                 }
             }
         }
