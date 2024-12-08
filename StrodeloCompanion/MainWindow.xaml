@@ -18,9 +18,9 @@
         </StackPanel>
 
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Background="#3C2970" Height="300" Margin="-2,0,0,100">
-            <TextBlock x:Name="PairFirst" Text="Pair Device First" FontSize="45" FontWeight="SemiBold"  Margin="235,190,0,10" VerticalAlignment="Center"   Height="50" Visibility="Visible"  Grid.Row="1"/>
-            <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon1" VerticalAlignment="Center" Margin="-330,0,0,10" Visibility="Visible" Fill="#9526E0">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Background="#3C2970" Height="300" Margin="-15,0,0,100">
+            <TextBlock x:Name="PairFirst" Text="Enter IP and Pair Device" FontSize="45" FontWeight="SemiBold"  Margin="165,190,0,10" VerticalAlignment="Center"   Height="50" Visibility="Visible"  Grid.Row="1"/>
+            <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon1" VerticalAlignment="Center" Margin="-480,0,0,10" Visibility="Visible" Fill="#9526E0">
                 <Rectangle.OpacityMask>
                     <ImageBrush ImageSource="pack://application:,,,/noDeviceIcon.png"/>
                 </Rectangle.OpacityMask>
@@ -31,7 +31,7 @@
 
         <!-- Drag and Drop Area -->
         <Button Grid.Row="1" x:Name="FileSubmissionArea" BorderBrush="White" BorderThickness="6" AllowDrop="True" 
-        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"   
+        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"   Visibility="Collapsed"
         Click="FileSubmissionArea_Click"
         Background="#3C2970" Margin="15 5" Padding="40" >
             <Grid>
