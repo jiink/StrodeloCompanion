@@ -18,10 +18,10 @@
         </StackPanel>
 
 
-        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#3C2970" Height="300" Margin="-15,0,0,100">
+        <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#3C2970">
             <!--Show this and hide the other when no device is paired
             and you can't use this area. image aspect ratio is 3:2-->
-            <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" Visibility="Collapsed" Fill="#9526E0">
+            <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon1" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Visible" Fill="#9526E0">
                 <Rectangle.OpacityMask>
                     <ImageBrush ImageSource="pack://application:,,,/noDeviceIcon.png"/>
                 </Rectangle.OpacityMask>
@@ -31,7 +31,7 @@
 
         <!-- Drag and Drop Area -->
         <Button Grid.Row="1" x:Name="FileSubmissionArea" BorderBrush="White" BorderThickness="6" AllowDrop="True" 
-        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop" Visibility="Visible"
+        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop" Visibility="Collapsed"
         Click="FileSubmissionArea_Click"
         Margin="15 5" Padding="40" >
             <Button.Style>
