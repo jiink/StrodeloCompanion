@@ -287,8 +287,8 @@ namespace StrodeloCompanion
         {
             FileSubmissionArea.Background = fileSubmissionAreaOgBackground; // Reset background
             FileSubmissionArea.BorderBrush = fileSubmissionAreaOgBorder;      // Reset border
-            DropText.Text = "Drag and Drop File Here";                          // Reset text
-            DropText.Foreground = new SolidColorBrush(Colors.Black);            // Reset text color
+            DropText.Text = "Drag & Drop";                          // Reset text
+            DropText.Foreground = new SolidColorBrush(Colors.White);            // Reset text color
         }
 
         // Verify the integrity of the file (hash check, file size check, etc.)
