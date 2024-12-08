@@ -8,7 +8,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <!-- Toolbar Section with Combined StackPanel -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" Background="#3C2970" Height="60" Margin="10 0">
             <Button Content="⚙" FontSize="30" Width="60" Background="#9526E0" Foreground="#3C2970" FontWeight="UltraBold" BorderThickness="0" Margin="7"/>
@@ -17,23 +17,27 @@
             <TextBlock x:Name="DeviceStatusTextBlock" Text="Sample device status ❓" Foreground="Lime" FontSize="25" Visibility="Visible" VerticalAlignment="Center" Margin="10,10,5,10"/>
         </StackPanel>
 
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" Background="#3C2970" Height="300" Margin="-2,0,0,100">
+            <TextBlock x:Name="PairFirst" Text="Pair Device First" FontSize="45" FontWeight="SemiBold"  Margin="235,190,0,10" VerticalAlignment="Center"   Height="50" Visibility="Visible"  Grid.Row="1"/>
+            <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon1" VerticalAlignment="Center" Margin="-330,0,0,10" Visibility="Visible" Fill="#9526E0">
+                <Rectangle.OpacityMask>
+                    <ImageBrush ImageSource="pack://application:,,,/noDeviceIcon.png"/>
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </StackPanel>
+
+
+
         <!-- Drag and Drop Area -->
-        <Button Grid.Row="1" x:Name="FileSubmissionArea" BorderBrush="White" BorderThickness="6" AllowDrop="True"
-        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"
+        <Button Grid.Row="1" x:Name="FileSubmissionArea" BorderBrush="White" BorderThickness="6" AllowDrop="True" 
+        DragEnter="OnDragEnter" DragLeave="OnDragLeave" Drop="OnDrop"   
         Click="FileSubmissionArea_Click"
-        Background="#3C2970" Margin="15 5" Padding="40">
+        Background="#3C2970" Margin="15 5" Padding="40" >
             <Grid>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <!--Show this and hide the other when no device is paired
                     and you can't use this area. image aspect ratio is 3:2-->
-                    <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon" Visibility="Visible">
-                        <Rectangle.Fill>
-                            <SolidColorBrush Color="#9526E0"/>
-                        </Rectangle.Fill>
-                        <Rectangle.OpacityMask>
-                            <ImageBrush ImageSource="pack://application:,,,/noDeviceIcon.png"/>
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
                     <!--Show this and hide the other when you can use this area. image aspect ratio is 4:1-->
                     <Rectangle Width="320" Height="80" x:Name="YesDeviceIcon" Visibility="Collapsed">
                         <Rectangle.Fill>
@@ -43,9 +47,15 @@
                             <ImageBrush ImageSource="pack://application:,,,/transferIcons.png"/>
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock x:Name="DropText" Text="Drag &#38; Drop" FontSize="45" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
-                    <TextBlock Text="or click to browse" FontSize="16" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                    <TextBlock Text=" .obj, .glb, .gltf, .fbx, .stl, .ply, .3mf, .dae, .png, .jpg, .hdr" FontSize="14" Foreground="#9526E0" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                    <Rectangle Width="120" Height="80" x:Name="NoDeviceIcon" Visibility="Visible" Fill="#9526E0">
+                        <Rectangle.OpacityMask>
+                            <ImageBrush ImageSource="pack://application:,,,/noDeviceIcon.png"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+
+                    <TextBlock x:Name="DropText" Text="Drag &#38; Drop" FontSize="45" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center" Visibility="Collapsed"/>
+                    <TextBlock x:Name="DropText1" Text="or click to browse" FontSize="16" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center" Visibility="Collapsed"/>
+                    <TextBlock x:Name="DropText2" Text=" .obj, .glb, .gltf, .fbx, .stl, .ply, .3mf, .dae, .png, .jpg, .hdr" FontSize="14" Foreground="#9526E0" HorizontalAlignment="Center" Visibility="Collapsed"    Margin="0,10,0,0"/>
                 </StackPanel>
             </Grid>
         </Button>
