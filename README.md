@@ -15,3 +15,6 @@ A GUI for Windows designed to be used with [Strodelo Viewer](https://github.com/
 
 ## Building from Source
 This project currently uses .NET 8.0 and Windows Presentation Foundation (WPF) and is developed in Visual Studio Community 2022. The components needed to build this project may be found in the Visual Studio Installer by clicking Modify for Visual Studio 2022 and checking ".NET desktop development". The project is built like any Visual Studio .NET project.
+
+## Contributors
+This project was developed by Jacob Carlson, Puthioudom Chum, Luis Dominguez, and Tri Bui for our senior capstone project.
